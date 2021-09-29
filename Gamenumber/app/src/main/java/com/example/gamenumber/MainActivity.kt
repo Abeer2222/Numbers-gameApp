@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        title = "Number Game"
+
         rNumber = Random.nextInt(10)
 
         myLayout = findViewById(R.id.clMain)
@@ -43,38 +45,42 @@ class MainActivity : AppCompatActivity() {
         guessField = findViewById(R.id.etGuessField)
         gButton = findViewById(R.id.btGuess)
 
-        gButton.setOnClickListener { addMessage() }
+        gButton.setOnClickListener { addGuss() }
     }
-    private fun addMessage(){
+
+    private fun addGuss() {
         val input = guessField.text.toString()
-        if(input.isNotEmpty()){
-            if(guessCount>0){
-                if(input.toInt() == rNumber){
-                    disableEntry()
+
+        if (input.isNotEmpty()) {
+            if (guessCount > 0) {
+                if (input.toInt() == rNumber) {
+                    Enable()
                     showAlertDialog("Correct!\n\n Again?")
-                }else{
+                } else {
                     guessCount--
-                    theList.add("You guessed $input")
-                    theList.add("You have guessed $guessCount ")
+                    theList.add("Your guess $input is wrong")
+                    theList.add("You have guessed $guessCount left")
                 }
-                if(guessCount==0){
-                    disableEntry()
-                    theList.add("Y The correct answer was $rNumber")
+                if (guessCount == 0) {
+                    Enable()
+                    theList.add("The correct answer was $rNumber")
                     theList.add("Game Over")
+                    //
                     showAlertDialog("You lose...\nThe correct answer was $rNumber.\n\nPlay again?")
                 }
             }
             guessField.text.clear()
             guessField.clearFocus()
             rvMessages.adapter?.notifyDataSetChanged()
-        }else{
+        } else {
             Snackbar.make(myLayout, "Please enter a number", Snackbar.LENGTH_LONG).show()
         }
     }
-    private fun disableEntry(){
+
+    private fun Enable() {
         gButton.isEnabled = false
         gButton.isClickable = false
-        guessField.isEnabled=false
+        guessField.isEnabled = false
         guessField.isClickable = false
     }
 
@@ -87,12 +93,12 @@ class MainActivity : AppCompatActivity() {
             // if the dialog is cancelable
             .setCancelable(false)
             // positive button text and action
-            .setPositiveButton("Yes", DialogInterface.OnClickListener {
-                    dialog, id -> this.recreate()
+            .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                this.recreate()
             })
             // negative button text and action
-            .setNegativeButton("No", DialogInterface.OnClickListener {
-                    dialog, id -> dialog.cancel()
+            .setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+                dialog.cancel()
             })
 
         // create dialog box
